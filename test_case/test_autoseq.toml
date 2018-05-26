@@ -1,0 +1,63 @@
+# TOML TC Example
+
+# TC Information includes creator info and options for this Tc, such as auto seq.
+[TC-information]
+  creator = "Dry8r3aD <me@dry8r3ad.com>"
+  name = "tcp_connection_open_01"
+
+  [TC-options]
+    use_auto_seq = "true"
+    use_fixed_win_size = "false"	# 65535
+
+# Included before parsing the main client/server packets
+[template]
+  [import-client]
+    filename = "./open_client.toml"
+
+  [import-server]
+    filename = "./open_server.toml"
+
+[client]
+  interface = "tp0"
+  ip = "1.1.1.1"
+  port = "4567"
+
+  [[client.packet]]
+    action = "send"
+	flags = [ "syn" ]
+	len = "1460"
+	[[client.packet.option]]
+	  mss = "1460"
+	  sack_perm = "on"
+
+  [[client.packet]]
+    action = "recv"
+	flags = [ "syn", "ack" ]
+	len = "1460"
+
+  [[client.packet]]
+    action = "send"
+	flags = [ "ack" ]
+	len = "1455"
+	[[client.packet.option]]
+	  mss = "14644"
+	  sack_perm = "off"
+
+[server]
+  interface = "tp1"
+  ip = "2.2.2.2"
+  port = "80"
+
+  [[server.packet]]
+    action = "recv"
+	flags = [ "syn" ]
+	len = "1460"
+
+  [[server.packet]]
+    action = "send"
+	flags = [ "syn", "ack" ]
+	len = "1460"
+	[[server.packet.option]]
+	  mss = "1460"
+	  sack_perm = "off"
+

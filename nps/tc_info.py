@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+import netifaces
 
 # TestCaseInfo
 #
@@ -19,7 +20,16 @@ class TestCaseInfo(object):
 
     # Initialize
     def __init__(self):
-        print("Hello World~~!")
+        print("New TC Info obj created")
+
+    def set_tc_info_name(self, name):
+        self.tc_name = name
+
+    def set_tc_info_auto_seq(self, flag):
+        self.tc_opt_auto_seq = flag
+
+    def set_tc_info_fixed_win(self, flag):
+        self.tc_opt_fixed_win = flag
 
 
 # PacketList
@@ -40,8 +50,25 @@ class PacketList(object):
 
     # Initialize
     def __init__(self, name):
-        print("Hello World!" + name)
-        packet_list_name = name
+        print("New Packet List created : " + name)
+        self.packet_list_name = name
+
+    def set_interface_name(self, name):
+        print("")
+        self.interface_name = name
+        self.set_interface_mac(name)
+
+    def set_interface_mac(self, name):
+        self.interface_mac = netifaces.ifaddresses(name)[netifaces.AF_LINK][0]['addr']
+
+    def set_interface_ip(self, ip):
+        self.interface_ip = ip
+
+    def set_interface_port(self, port):
+        self.interface_port = port
+
+    def add_pkt_to_list(self, pkt):
+        self.pkt_list.append(pkt)
 
 
 # PacketInfo
@@ -69,7 +96,39 @@ class PacketInfo(object):
 
     # Initialize
     def __init__(self):
-        print("Hello World!")
+        print("New Packet obj created")
 
+    def set_pkt_action(self, action):
+        self.pkt_action = action
+
+    def set_pkt_flags(self, flags):
+        self.pkt_flags.append(flags)
+
+    def set_pkt_seq(self, seq):
+        self.pkt_seq = seq
+
+    def set_pkt_ack(self, ack):
+        self.pkt_ack = ack
+
+    def set_pkt_win(self, win):
+        self.pkt_win = win
+
+    def set_pkt_checksum(self, sum):
+        self.pkt_sum = sum
+
+    def set_pkt_urg_ptr(self, urg):
+        self.pkt_urg_ptr = urg
+
+    def set_pkt_data_len(self, len):
+        self.pkt_data_len = len
+
+    def set_pkt_opt_mss(self, mss):
+        self.pkt_opt_mss = mss
+
+    def set_pkt_opt_sack_perm(self, perm):
+        self.pkt_opt_sack_perm = perm
+
+    def set_pkt_opt_win_scale(self, scale):
+        self.pkt_opt_win_scale = scale
 
 

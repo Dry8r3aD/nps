@@ -22,7 +22,7 @@
     filename = "./close_server.toml"
 
 [client]
-  interface = "tp0"
+  interface = "en0"
   ip = "1.1.1.1"
   port = "4567"
 
@@ -66,7 +66,7 @@
 
 
 [server]
-  interface = "tp1"
+  interface = "en1"
   ip = "2.2.2.2"
   port = "80"
 

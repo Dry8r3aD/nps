@@ -35,7 +35,7 @@
 	checksum = "0xb359"
 	urg_ptr = "0"
 	len = "1460"
-	[[client.packet.option]]
+	[client.packet.option]
 	  mss = "1460"
 	  sack_perm = "on"
 	  window_scale = "4"
@@ -59,7 +59,7 @@
 	checksum = "0xb359"
 	urg_ptr = "0"
 	len = "1455"
-	[[client.packet.option]]
+	[client.packet.option]
 	  mss = "14644"
 	  sack_perm = "off"
 	  window_scale = "4"
@@ -89,7 +89,7 @@
 	checksum = "0xb359"
 	urg_ptr = "0"
 	len = "1460"
-	[[server.packet.option]]
+	[server.packet.option]
 	  mss = "1460"
 	  sack_perm = "off"
 

@@ -105,3 +105,6 @@ venv.bak/
 
 # IntelliJ
 .idea/
+
+# Mac OS X
+.DS_Store

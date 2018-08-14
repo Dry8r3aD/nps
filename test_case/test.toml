@@ -4,78 +4,89 @@
 [TC-information]
   creator = "Dry8r3aD <me@dry8r3ad.com>"
   name = "tcp_connection_open_01"
-
-  [TC-options]
+  [TC-information.options]
     use_auto_seq = "false"
     use_fixed_win_size = "false"
 
 # Included before parsing the main client/server packets
-[template]
-  [import-client]
-    filename = "./open_client.toml"
+[pre-template]
+  	filename = ["./open_client.toml", "open_client_2.toml", "open_client_3.toml"]
 
-  [import-server]
-    filename = "./open_server.toml"
+[post-template]
+  [post-template.client]
+    filename = "./close_client.toml"
+  [post-template.server]
+    filename = "./close_server.toml"
 
 [client]
-  interface = "tp0"
+  interface = "en0"
   ip = "1.1.1.1"
   port = "4567"
 
   [[client.packet]]
     action = "send"
-	flags = [ "syn" ]
 	seq = "1230"
 	ack = "435"
+	flags = [ "syn" ]
 	win = "65535"
+	checksum = "0xb359"
+	urg_ptr = "0"
 	len = "1460"
-	[[client.packet.option]]
+	[client.packet.option]
 	  mss = "1460"
 	  sack_perm = "on"
 	  window_scale = "4"
 
   [[client.packet]]
     action = "recv"
-	flags = [ "syn", "ack" ]
 	seq = "1231"
 	ack = "435"
+	flags = [ "syn", "ack" ]
 	win = "65535"
+	checksum = "0xb359"
+	urg_ptr = "0"
 	len = "1460"
 
   [[client.packet]]
     action = "send"
-	flags = [ "ack" ]
 	seq = "1232"
 	ack = "434"
+	flags = [ "ack" ]
 	win = "65535"
+	checksum = "0xb359"
+	urg_ptr = "0"
 	len = "1455"
-	[[client.packet.option]]
+	[client.packet.option]
 	  mss = "14644"
 	  sack_perm = "off"
 	  window_scale = "4"
 
 
 [server]
-  interface = "tp1"
+  interface = "en1"
   ip = "2.2.2.2"
   port = "80"
 
   [[server.packet]]
     action = "recv"
-	flags = [ "syn" ]
 	seq = "1230"
 	ack = "435"
+	flags = [ "syn" ]
 	win = "65535"
+	checksum = "0xb359"
+	urg_ptr = "0"
 	len = "1460"
 
   [[server.packet]]
     action = "send"
-	flags = [ "syn", "ack" ]
 	seq = "1231"
 	ack = "435"
+	flags = [ "syn", "ack" ]
 	win = "65535"
+	checksum = "0xb359"
+	urg_ptr = "0"
 	len = "1460"
-	[[server.packet.option]]
+	[server.packet.option]
 	  mss = "1460"
 	  sack_perm = "off"
 

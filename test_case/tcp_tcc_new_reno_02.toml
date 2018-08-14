@@ -1,0 +1,100 @@
+# About TC
+# - Session open
+# - data packet ping-ping 3 times(segments)
+# - send dup-ack 3 times
+# - wait for fast retransmission
+# - send partial ack 1 time
+#
+# Success
+# - When partial ack is received, fast retranmission packet is suppose to be sent.
+
+[TC-information]
+	creator = "Dry8r3aD <me@dry8r3ad.com>"
+	name = "tcp_tcc_new_reno_01"
+	
+	[TC-information.options]
+    	use_auto_seq = "false"
+    	use_fixed_win_size = 65535
+
+[pre-template]
+	filename = "tcp_open_con_02"
+
+[client]
+	interface = "en0"
+	ip = "1.2.3.4"
+	port = 4567
+
+	[[client.packet]]
+		action = "recv"
+		seq = 2
+		ack = 1002
+		flag = [ "ack" ]
+		len = 1460
+
+	[[client.packet]]
+		action = "send"
+		seq = 1002
+		ack = 1462
+		flag = [ "ack" ]
+
+	[[client.packet]]
+		action = "recv"
+		seq = 1462
+		ack = 1002
+		flag = [ "ack" ]
+		len = 1460
+
+	[[client.packet]]
+		action = "send"
+		seq = 1002
+		ack = 2922
+		flag = [ "ack" ]
+
+	# 3 Duplicated acks
+	[[client.packet]]
+		action = "send"
+		seq = 1002
+		ack = 2922
+		flag = [ "ack" ]
+
+	[[client.packet]]
+		action = "send"
+		seq = 1002
+		ack = 2922
+		flag = [ "ack" ]
+
+	[[client.packet]]
+		action = "send"
+		seq = 1002
+		ack = 2922
+		flag = [ "ack" ]
+
+	# 1 Partial ack
+	[[client.packet]]
+		action = "send"
+		seq = 1002
+		ack = 3000
+		flag = [ "ack" ]
+
+[server]
+	[[server.packet]]
+		action = "send"
+		seq = 2
+		ack = 1002
+		flag = [ "ack" ]
+		
+		[server.packet.data]
+			filename = "1M"
+			start = 0
+			len = 1460
+
+	[[server.packet]]
+		action = "send"
+		seq = 1462
+		ack = 1002
+		flag = [ "ack" ]
+		
+		[server.packet.data]
+			filename = "1M"
+			start = 1460
+			len = 1460

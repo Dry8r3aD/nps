@@ -33,16 +33,7 @@ class ParseTomlTc(object):
         for root_tag in tc_dict:
             print(root_tag)
             if root_tag == "TC-information":
-                print("")
-                for sub_tag in tc_dict[root_tag]:
-                    if sub_tag == "name":
-                        tc_info_list.set_tc_info_name(tc_dict[root_tag][sub_tag])
-                    elif sub_tag == "options":
-                        for element in tc_dict[root_tag][sub_tag]:
-                            if element == "use_auto_seq":
-                                tc_info_list.set_tc_info_auto_seq(tc_dict[root_tag][sub_tag][element])
-                            elif element == "use_fixed_win_size":
-                                tc_info_list.set_tc_info_fixed_win(tc_dict[root_tag][sub_tag][element])
+                parse_tc_info_node(tc_dict, tc_info_list)
 
             elif root_tag == "pre-template":
                 print("")
@@ -54,43 +45,7 @@ class ParseTomlTc(object):
             elif root_tag == "client":
                 print("")
                 # pp.pprint(tc_dict[root_tag])
-                for sub_tag in tc_dict[root_tag]:
-                    if sub_tag == "interface":
-                        client_pkt_list.set_interface_name(tc_dict[root_tag][sub_tag])
-                    elif sub_tag == "ip":
-                        client_pkt_list.set_interface_ip(tc_dict[root_tag][sub_tag])
-                    elif sub_tag == "port":
-                        client_pkt_list.set_interface_port(tc_dict[root_tag][sub_tag])
-                    elif sub_tag == "packet":
-                        for idx in range(len(tc_dict[root_tag][sub_tag])):
-                            pkt_obj = PacketInfo()
-                            client_pkt_list.add_pkt_to_list(pkt_obj)
-
-                            for element in tc_dict[root_tag][sub_tag][idx]:
-                                if element == "action":
-                                    pkt_obj.set_pkt_action(tc_dict[root_tag][sub_tag][idx][element])
-                                elif element == "seq":
-                                    pkt_obj.set_pkt_seq(tc_dict[root_tag][sub_tag][idx][element])
-                                elif element == "ack":
-                                    pkt_obj.set_pkt_ack(tc_dict[root_tag][sub_tag][idx][element])
-                                elif element == "flags":
-                                    pkt_obj.set_pkt_flags(tc_dict[root_tag][sub_tag][idx][element])
-                                elif element == "win":
-                                    pkt_obj.set_pkt_win(tc_dict[root_tag][sub_tag][idx][element])
-                                elif element == "checksum":
-                                    pkt_obj.set_pkt_checksum(tc_dict[root_tag][sub_tag][idx][element])
-                                elif element == "urg_ptr":
-                                    pkt_obj.set_pkt_urg_ptr(tc_dict[root_tag][sub_tag][idx][element])
-                                elif element == "len":
-                                    pkt_obj.set_pkt_data_len(tc_dict[root_tag][sub_tag][idx][element])
-                                elif element == "option":
-                                    for option in tc_dict[root_tag][sub_tag][idx][element]:
-                                        if option == "mss":
-                                            pkt_obj.set_pkt_opt_mss(tc_dict[root_tag][sub_tag][idx][element][option])
-                                        elif option == "sack_perm":
-                                            pkt_obj.set_pkt_opt_sack_perm(tc_dict[root_tag][sub_tag][idx][element][option])
-                                        elif option == "window_scale":
-                                            pkt_obj.set_pkt_opt_win_scale(tc_dict[root_tag][sub_tag][idx][element][option])
+                parse_client_tc_info_node(tc_dict, client_pkt_list)
             elif root_tag == "server":
                 print("")
                 # pp.pprint(tc_dict[root_tag])
@@ -141,6 +96,59 @@ class ParseTomlTc(object):
         # print(tc_dict)
 
         return tc_dict
+
+
+def parse_tc_info_node(dict, tc_info_list):
+    for sub_tag in dict["TC-information"]:
+        if sub_tag == "name":
+            tc_info_list.set_tc_info_name(dict["TC-information"][sub_tag])
+        elif sub_tag == "options":
+            for element in dict["TC-information"][sub_tag]:
+                if element == "use_auto_seq":
+                    tc_info_list.set_tc_info_auto_seq(dict["TC-information"][sub_tag][element])
+                elif element == "use_fixed_win_size":
+                    tc_info_list.set_tc_info_fixed_win(dict["TC-information"][sub_tag][element])
+
+def parse_pkt_list_info_node(dict, pkt_list, dir):
+    for sub_tag in dict["client"]:
+        if sub_tag == "interface":
+            pkt_list.set_interface_name(dict[root_tag][sub_tag])
+        elif sub_tag == "ip":
+            pkt_list.set_interface_ip(dict[root_tag][sub_tag])
+        elif sub_tag == "port":
+            pkt_list.set_interface_port(dict[root_tag][sub_tag])
+        elif sub_tag == "packet":
+            for idx in range(len(dict[root_tag][sub_tag])):
+                pkt_obj = PacketInfo()
+                client_pkt_list.add_pkt_to_list(pkt_obj)
+
+                for element in dict[root_tag][sub_tag][idx]:
+                    if element == "action":
+                        pkt_obj.set_pkt_action(dict[root_tag][sub_tag][idx][element])
+                    elif element == "seq":
+                        pkt_obj.set_pkt_seq(dict[root_tag][sub_tag][idx][element])
+                    elif element == "ack":
+                        pkt_obj.set_pkt_ack(dict[root_tag][sub_tag][idx][element])
+                    elif element == "flags":
+                        pkt_obj.set_pkt_flags(dict[root_tag][sub_tag][idx][element])
+                    elif element == "win":
+                        pkt_obj.set_pkt_win(dict[root_tag][sub_tag][idx][element])
+                    elif element == "checksum":
+                        pkt_obj.set_pkt_checksum(dict[root_tag][sub_tag][idx][element])
+                    elif element == "urg_ptr":
+                        pkt_obj.set_pkt_urg_ptr(dict[root_tag][sub_tag][idx][element])
+                    elif element == "len":
+                        pkt_obj.set_pkt_data_len(dict[root_tag][sub_tag][idx][element])
+                    elif element == "option":
+                        for option in dict[root_tag][sub_tag][idx][element]:
+                            if option == "mss":
+                                pkt_obj.set_pkt_opt_mss(dict[root_tag][sub_tag][idx][element][option])
+                            elif option == "sack_perm":
+                                pkt_obj.set_pkt_opt_sack_perm(dict[root_tag][sub_tag][idx][element][option])
+                            elif option == "window_scale":
+                                pkt_obj.set_pkt_opt_win_scale(dict[root_tag][sub_tag][idx][element][option])
+
+
 
 
 class ParseJsonTc(object):

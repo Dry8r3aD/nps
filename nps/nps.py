@@ -58,8 +58,12 @@ def main():
     # print(client_pkt_list.interface_mac)
     # print(client_pkt_list.interface_name + "  " + server_pkt_list.interface_name)
     #
-    # print(len(client_pkt_list.pkt_list))
-    # print(len(server_pkt_list.pkt_list))
+    # print(tc_info_list)
+    # print(client_pkt_list)
+    # print(server_pkt_list)
+
+    # print(tc_info_list.tc_name)
+    # print(tc_info_list.tc_opt_auto_seq)
     #
     # for i in range(len(client_pkt_list.pkt_list)):
     #    print((client_pkt_list.pkt_list[i].pkt_seq))

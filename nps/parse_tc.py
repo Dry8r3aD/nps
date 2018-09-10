@@ -18,7 +18,7 @@ class ParseTomlTc(object):
         print("TOML TC!")
 
     # Main method, entry point
-    def parse_processor(self, file_path, tc_info_list, client_pkt_list, server_pkt_list):
+    def parse_processor(self, file_path, tc_info_list, client_pkt_list, server_pkt_list, is_recursive=False):
         tc_dict = self.convert_to_dict(file_path)
 
         # for debugging
@@ -32,17 +32,18 @@ class ParseTomlTc(object):
         #       - element
         for root_tag in tc_dict:
             # print(root_tag)
-            if root_tag == "TC-information":
+            # If another tc file is included in the tc file, only template and pkt_list_info nodes asre poarsed.
+            if root_tag == "TC-information" and not is_recursive:
                 parse_tc_info_node(tc_dict, tc_info_list)
             elif root_tag == "pre-template":
-                print("")
+                include_file = tc_dict["pre-template"]["filename"]
+                self.parse_processor(include_file, tc_info_list, client_pkt_list, server_pkt_list, True)
             elif root_tag == "post-template":
-                print("")
+                include_file = tc_dict["post-template"]["filename"]
+                self.parse_processor(include_file, tc_info_list, client_pkt_list, server_pkt_list, True)
             elif root_tag == "client":
-                print("")
                 parse_pkt_list_info_node(tc_dict, client_pkt_list, "client")
             elif root_tag == "server":
-                print("")
                 parse_pkt_list_info_node(tc_dict, server_pkt_list, "server")
             else:
                 print("TC's containing non-support tags")
@@ -70,7 +71,7 @@ def parse_tc_info_node(tc_dict, tc_info_list):
 def parse_pkt_list_info_node(tc_dict, pkt_list, direction):
 
     if direction != "client" and direction != "server":
-        return;
+        return
 
     for sub_tag in tc_dict[direction]:
         if sub_tag == "interface":

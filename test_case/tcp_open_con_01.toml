@@ -8,13 +8,13 @@
 [TC-information]
 	creator = "Dry8r3aD <me@dry8r3ad.com>"
 	name = "tcp_open_con_01"
-	
+
 	[TC-information.options]
     	use_auto_seq = "false"
     	use_fixed_win_size = 0
 
 [client]
-	interface = "en0"
+	interface = "eth0"
 	ip = "1.2.3.4"
 	port = 4567
 
@@ -23,7 +23,7 @@
 		seq = 1001
 		ack = 1
 		flags = [ "syn" ]
-		
+
 		[client.packet.option]
 			mss = 1460
 			sack_perm = "true"
@@ -33,7 +33,7 @@
 		seq = 1
 		ack = 1002
 		flags = [ "syn", "ack" ]
-		
+
 		[client.packet.option]
 			mss = 1460
 			sack_perm = "true"
@@ -45,7 +45,7 @@
 		flags = [ "ack" ]
 
 [server]
-	interface = "en1"
+	interface = "eth0"
 	ip = "1.2.3.5"
 	port = 80
 
@@ -64,7 +64,7 @@
 		seq = 1
 		ack = 1002
 		flags = [ "syn", "ack" ]
-		
+
 		[client.packet.option]
 			mss = 1460
 			sack_perm = "true"

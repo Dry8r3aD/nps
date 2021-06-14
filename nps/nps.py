@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from parse_tc import *
+from tc_info import TestCaseInfo, PacketList
 import argparse
 import sys
 import pprint
-from parse_tc import *
-from tc_info import TestCaseInfo, PacketList
+import scapy
 
 
 def main():
@@ -58,9 +59,9 @@ def main():
     # print(client_pkt_list.interface_mac)
     # print(client_pkt_list.interface_name + "  " + server_pkt_list.interface_name)
     #
-    # print(tc_info_list)
-    # print(client_pkt_list)
-    # print(server_pkt_list)
+    print(tc_info_list)
+    print(client_pkt_list)
+    print(server_pkt_list)
 
     # print(tc_info_list.tc_name)
     # print(tc_info_list.tc_opt_auto_seq)

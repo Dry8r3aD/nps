@@ -3,6 +3,7 @@
 
 from parse_tc import *
 from tc_info import TestCaseInfo, PacketList
+from scapy.all import 
 import argparse
 import sys
 import pprint
@@ -36,8 +37,7 @@ def main():
 
     # Class 생성
     tc_info_list = TestCaseInfo()
-    client_pkt_list = PacketList("client")
-    server_pkt_list = PacketList("server")
+    pkt_list = PacketList("Packet List")
 
     # tc_analyzer is different per TC File format
     # nps only supports "TOML" for now
@@ -50,7 +50,7 @@ def main():
         exit(0)
 
     # Parse TC's content and assign it to the classes created above
-    tc_analyzer.parse_processor(args.file, tc_info_list, client_pkt_list, server_pkt_list)
+    tc_analyzer.parse_processor(args.file, tc_info_list, pkt_list)
 
     # client pkt_list processor / server pkt_list processor
     # Read pkt_list -> create pkt -> rx / tx / wait
@@ -58,17 +58,14 @@ def main():
     # print(tc_info_list.tc_name + "&&&" + tc_info_list.tc_opt_auto_seq + "$$$$" + tc_info_list.tc_opt_fixed_win)
     # print(client_pkt_list.interface_mac)
     # print(client_pkt_list.interface_name + "  " + server_pkt_list.interface_name)
-    #
-    print(tc_info_list)
-    print(client_pkt_list)
-    print(server_pkt_list)
 
-    # print(tc_info_list.tc_name)
-    # print(tc_info_list.tc_opt_auto_seq)
-    #
-    # for i in range(len(client_pkt_list.pkt_list)):
-    #    print((client_pkt_list.pkt_list[i].pkt_seq))
-    #    print("mss :" + str(client_pkt_list.pkt_list[i].pkt_opt_mss))
+    print(tc_info_list)
+    print(pkt_list)
+
+    for pkt_obj in pkt_list.pkt_list:
+        resp = sr(pkt_obj.pkt, timeout=2)
+        print(resp)
+        
 
 
 if __name__ == "__main__":

@@ -13,64 +13,36 @@
     	use_auto_seq = "false"
     	use_fixed_win_size = 0
 
-[client]
-	interface = "eth0"
-	ip = "1.2.3.4"
-	port = 4567
+[PacketList]
+	interface = "eth0" 	# Interface where we'll xmit the packet
 
-	[[client.packet]]
+	src_ip = "172.24.18.134"	# IP of mine
+	dst_ip = "172.24.18.134"		# IP of the DUT
+
+	src_port = 28509	# Port of mine
+	dst_port = 5000		# Port of the DUT
+
+	[[PacketList.packet]]
     	action = "send"
 		seq = 1001
-		ack = 1
 		flags = [ "syn" ]
 
-		[client.packet.option]
+		[PacketList.packet.option]
 			mss = 1460
 			sack_perm = "true"
 
-	[[client.packet]]
+	[[PacketList.packet]]
     	action = "recv"
 		seq = 1
 		ack = 1002
 		flags = [ "syn", "ack" ]
 
-		[client.packet.option]
+		[PacketList.packet.option]
 			mss = 1460
 			sack_perm = "true"
 
-	[[client.packet]]
-    	action = "recv"
-		seq = 1
-		ack = 1002
-		flags = [ "ack" ]
-
-[server]
-	interface = "eth0"
-	ip = "1.2.3.5"
-	port = 80
-
-	[[server.packet]]
-		actoin = "recv"
-		seq = 1001
-		ack = 1
-		flags = [ "syn" ]
-
-		[server.packet.option]
-			mss = 1460
-			sack_perm = "true"
-
-	[[server.packet]]
-		action = "send"
-		seq = 1
-		ack = 1002
-		flags = [ "syn", "ack" ]
-
-		[client.packet.option]
-			mss = 1460
-			sack_perm = "true"
-
-	[[server.packet]]
-	    action = "recv"
-		seq = 1
-		ack = 1002
+	[[PacketList.packet]]
+    	action = "send"
+		seq = 1002
+		ack = 2
 		flags = [ "ack" ]

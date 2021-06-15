@@ -33,8 +33,8 @@ class TestCaseInfo:
         self.tc_opt_fixed_win = flag
 
 
-# PacketList
-class PacketList:
+# PacketObjList
+class PacketObjList:
 
     # Initialize
     def __init__(self, name) -> None:

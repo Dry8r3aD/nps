@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from parse_tc import *
-from tc_info import TestCaseInfo, PacketList
-from scapy.all import 
+from tc_info import TestCaseInfo, PacketObjList
+from scapy.all import *
 import argparse
 import sys
 import pprint
@@ -37,7 +37,7 @@ def main():
 
     # Class 생성
     tc_info_list = TestCaseInfo()
-    pkt_list = PacketList("Packet List")
+    pkt_list = PacketObjList("Packet List")
 
     # tc_analyzer is different per TC File format
     # nps only supports "TOML" for now

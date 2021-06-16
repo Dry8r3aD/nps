@@ -1,13 +1,10 @@
 # About TC
-# - TCP SYN Handshaking process
-#   - Client option
-#     - SACK perem on, mss = 1460
-#   - Server option
-#     - SACK perem on, mss = 1460
+# - Validates if the DUT's TCP Stack can handle the SYN Packet properly.
+# - Send normal SYN packet with specific sequence number, and checks received SYN-ACK's ack number.
 
 [TC-information]
 	creator = "Dry8r3aD <me@dry8r3ad.com>"
-	name = "tcp_open_con_01"
+	name = "tcp_syn_packet_01"
 
 	[TC-information.options]
     	use_auto_seq = "false"
@@ -19,7 +16,7 @@
 	src_ip = "192.168.0.160"	# IP of mine
 	dst_ip = "192.168.0.100"		# IP of the DUT
 
-	src_port = 28509	# Port of mine
+	src_port = 40508	# Port of mine
 	dst_port = 80		# Port of the DUT
 
 	[[PacketList.packet]]
@@ -33,16 +30,9 @@
 
 	[[PacketList.packet]]
     	action = "recv"
-		seq = 1
-		ack = 1002
+		ack = 1001
 		flags = [ "syn", "ack" ]
 
 		[PacketList.packet.option]
 			mss = 1460
 			sack_perm = "true"
-
-	[[PacketList.packet]]
-    	action = "send"
-		seq = 1002
-		ack = 2
-		flags = [ "ack" ]

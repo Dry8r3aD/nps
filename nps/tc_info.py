@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import netifaces
 from scapy.all import *
-
+import logging
+import netifaces
 
 # TestCaseInfo
 #
@@ -16,7 +16,7 @@ class TestCaseInfo:
 
     # Initialize
     def __init__(self):
-        print("New TC Info obj created")
+        logging.debug("New TC Info obj created")
 
         # Variables                     # Explanation : Example( Format )
         self.tc_name = ""               # TC name : tcp_connection_open_01
@@ -38,7 +38,7 @@ class PacketObjList:
 
     # Initialize
     def __init__(self, name) -> None:
-        print("New Packet List created : " + name)
+        logging.debug("New Packet List created : " + name)
 
         # Variables                     # Explanation : Example( Format )
         self.packet_list_name = name    # name
@@ -107,7 +107,7 @@ class PacketInfo:
 
     # Initialize
     def __init__(self, interface, src_ip, dst_ip, src_port, dst_port):
-        print("New Packet obj created")
+        logging.debug("New Packet obj created")
 
         # Variables             # Explanation : Example( Format )
         # General Packet Information Variables
@@ -128,10 +128,12 @@ class PacketInfo:
         self.pkt_opt_win_scale = 0   # TCP window scale : 0 ~ 256
 
         # Data (Content)
-        self. data = ""
+        self.data = ""
 
         # Actual Packet Data
-        self.pkt = IP(src=src_ip, dst=dst_ip) / TCP(sport=src_port, dport=dst_port)
+        self.pkt = None
+        self.pkt_ip = IP(src=src_ip, dst=dst_ip)
+        self.pkt_tcp = TCP(sport=src_port, dport=dst_port)
 
     def __str__(self) -> str:
         return "Action: {} // Flag: {} // Seq: {} // Ack: {}".format(
@@ -152,7 +154,7 @@ class PacketInfo:
         elif "ACK" in self.pkt_flags:
             return "A"
         else:
-            print("Not supported TCP Flag detected ({})".format(self.pkt_flags))
+            logging.error("Not supported TCP Flag detected ({})".format(self.pkt_flags))
             return "N/A"
 
     def get_tcp_options(self) -> list():
@@ -169,8 +171,8 @@ class PacketInfo:
         return options
 
     def create_pkt(self):
-        tcp = self.pkt[TCP]
-        ip = self.pkt[IP]
+        tcp = self.pkt_tcp
+        ip = self.pkt_ip
         data = self.data
 
         tcp.seq = self.pkt_seq
@@ -179,19 +181,42 @@ class PacketInfo:
         tcp.options = self.get_tcp_options()
 
         self.pkt = ip / tcp / data
-        self.pkt.display()
+
+    def set_pkt_src_ip(self, value) -> str:
+        self.pkt_ip.src = value
+
+    def set_pkt_dst_ip(self, value) -> str:
+        self.pkt_ip.dst = value
+
+    def set_pkt_src_port(self, value) -> int:
+        self.pkt_tcp.sport = value
+
+    def set_pkt_dst_port(self, value) -> int:
+        self.pkt_tcp.dport = value
 
     def set_pkt_action(self, action):
         self.pkt_action = action
 
+    def get_pkt_action(self) -> str:
+        return self.pkt_action
+
     def set_pkt_flags(self, flags):
         self.pkt_flags = flags
+
+    def get_pkt_flags(self) -> str:
+        return self.pkt_flags
 
     def set_pkt_seq(self, seq):
         self.pkt_seq = seq
 
+    def get_pkt_seq(self) -> int:
+        return self.pkt_seq
+
     def set_pkt_ack(self, ack):
         self.pkt_ack = ack
+
+    def get_pkt_ack(self) -> int:
+        return self.pkt_ack
 
     def set_pkt_win(self, win):
         self.pkt_win = win

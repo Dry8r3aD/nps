@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+from tc_info import PacketInfo
 from re import sub
 import toml
 import pprint
-from tc_info import PacketInfo
+import logging
+
 
 # NOTE
 # 나중에 toml 형식이 아닌, 다른 형식의 file format based Tc를 사용 할 수도 있어서,
@@ -16,7 +18,7 @@ from tc_info import PacketInfo
 class ParseTomlTc(object):
 
     def __init__(self):
-        print("TOML TC!")
+        logging.debug("TOML TC!")
 
     # Main method, entry point
     def parse_processor(self, file_path, tc_info_list, pkt_list, is_recursive=False):
@@ -45,12 +47,11 @@ class ParseTomlTc(object):
             elif root_tag == "PacketList":
                 parse_pkt_list_info_node(tc_dict, pkt_list)
             else:
-                print("TC's containing non-support tags({})".format(root_tag))
+                logging.error("TC's containing non-support tags({})".format(root_tag))
                 exit(0)
 
     def convert_to_dict(self, file_path):
         tc_dict = toml.load(file_path)
-        # print(tc_dict)
 
         return tc_dict
 
@@ -94,6 +95,13 @@ def parse_pkt_list_info_node(tc_dict, pkt_list):
                 for element in value[idx]:
                     if element == "action":
                         pkt_obj.set_pkt_action(tc_dict["PacketList"][sub_tag][idx][element].upper())
+
+                        if pkt_obj.get_pkt_action().upper() == "RECV":
+                            pkt_obj.set_pkt_src_ip(pkt_list.get_dst_ip())
+                            pkt_obj.set_pkt_dst_ip(pkt_list.get_src_ip())
+                            pkt_obj.set_pkt_src_port(pkt_list.get_dst_port())
+                            pkt_obj.set_pkt_dst_port(pkt_list.get_src_port())
+
                     elif element == "seq":
                         pkt_obj.set_pkt_seq(tc_dict["PacketList"][sub_tag][idx][element])
                     elif element == "ack":
@@ -123,11 +131,11 @@ def parse_pkt_list_info_node(tc_dict, pkt_list):
 class ParseJsonTc(object):
 
     def __init__(self):
-        print("TBS")
+        logging.info("TBS")
 
     # Main method, entry point
     def parse_prosessor(self, file_path):
-        print("TBS")
+        logging.info("TBS")
 
     def convert_to_dict(self, file_path):
-        print("TBS")
+        logging.info("TBS")
